@@ -23,7 +23,6 @@
   sequence:
     commands:
     - exec: whoami
-    - exec: whoami
     keepgoing: false
     strategy: node-first
 
