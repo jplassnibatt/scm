@@ -3,7 +3,7 @@
   executionEnabled: true
   id: 2f59de0a-0066-4210-90f9-1566d6270428
   loglevel: INFO
-  name: scm_example
+  name: scm_example_n1
   nodeFilterEditable: false
   nodefilters:
     dispatch:
