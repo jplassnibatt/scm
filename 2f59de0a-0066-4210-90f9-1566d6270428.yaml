@@ -23,6 +23,9 @@
   sequence:
     commands:
     - exec: whoami
+    - autoSecureInput: 'false'
+      passSecureInput: 'false'
+      script: echo hello
     keepgoing: false
     strategy: node-first
 
