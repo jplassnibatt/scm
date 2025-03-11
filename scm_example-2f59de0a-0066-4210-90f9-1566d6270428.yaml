@@ -1,6 +1,7 @@
 - defaultTab: nodes
   description: ''
   executionEnabled: true
+  id: 2f59de0a-0066-4210-90f9-1566d6270428
   loglevel: INFO
   name: scm_example
   nodeFilterEditable: false
@@ -28,4 +29,5 @@
       script: echo hello
     keepgoing: false
     strategy: node-first
+  uuid: 2f59de0a-0066-4210-90f9-1566d6270428
 
