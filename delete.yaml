@@ -1,0 +1,92 @@
+- defaultTab: nodes
+  description: ''
+  executionEnabled: true
+  id: a93b924f-4633-4591-adcd-1e4323757a7e
+  loglevel: INFO
+  name: delete
+  nodeFilterEditable: false
+  options:
+  - hidden: true
+    name: ses_client
+    required: true
+    secure: true
+    storagePath: keys/project/jp-demos/aws/ses_client
+    valueExposed: true
+  - hidden: true
+    name: ses_secret
+    required: true
+    secure: true
+    storagePath: keys/project/jp-demos/aws/ses_secret
+    valueExposed: true
+  plugins:
+    ExecutionLifecycle: {}
+  schedule:
+    month: '*'
+    time:
+      hour: '11'
+      minute: '54'
+      seconds: '0'
+    weekday:
+      day: '*'
+    year: '*'
+  scheduleEnabled: true
+  schedules: []
+  sequence:
+    commands:
+    - autoSecureInput: 'false'
+      passSecureInput: 'false'
+      script: |-
+        #!/bin/bash
+        echo "line 2"
+        # Path to store the IP address
+        IP_FILE="$HOME/data/jp/latest_ip"
+        echo "line 5"
+        # Get current IP address
+        current_ip=$(curl -s ipinfo.io/ip)
+        echo "line 8"
+        # Check if curl command was successful
+        if [ $? -ne 0 ] || [ -z "$current_ip" ]; then
+            echo "Error: Failed to retrieve IP address"
+            exit 1
+        fi
+        echo "line 14"
+        # Check if IP file exists and read stored IP
+        if [ -f "$IP_FILE" ]; then
+            stored_ip=$(cat "$IP_FILE")
+            echo "line 18"
+            # Compare IPs
+            if [ "$current_ip" != "$stored_ip" ]; then
+                echo "new_ip=yes"
+                echo "Previous IP: $stored_ip"
+                echo "Current IP: $current_ip"
+                echo "Sending email informing the IP change"
+                export AWS_ACCESS_KEY_ID=@option.ses_client@
+                export AWS_SECRET_ACCESS_KEY=@option.ses_secret@
+                aws ses send-email \
+                    --from "RBA CSE IP Changed <cse_new_ip@rundecksupport.com>" \
+                    --destination '{
+                        "ToAddresses": [
+                            "dpatel1@pagerduty.com",
+                            "jlassnibatt@pagerduty.com"
+                            ]
+                        }' \
+                    --message "Subject={Data='Time to change RBA CSE IP'},Body={Text={Data='New RBA CSE IP is: $current_ip'}}" \
+                    --region "us-east-1"
+                # Update stored IP
+                echo "$current_ip" > "$IP_FILE"
+                echo $AWS_ACCESS_KEY_ID
+            else
+                echo "new_ip=no"
+                echo "IP unchanged: $current_ip"
+            fi
+            echo "line 44"
+        else
+            # First run - create IP file
+            echo "new_ip=yes"
+            echo "First run - storing IP: $current_ip"
+            echo "$current_ip" > "$IP_FILE"
+        fi
+        echo "line 51"
+    keepgoing: false
+    strategy: node-first
+  uuid: a93b924f-4633-4591-adcd-1e4323757a7e
