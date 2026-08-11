@@ -1,0 +1,34 @@
+- defaultTab: nodes
+  description: ''
+  executionEnabled: true
+  id: 51031c1f-cc82-41a4-b27f-7a09b718713f
+  loglevel: INFO
+  name: test_to_export
+  nodeFilterEditable: false
+  plugins:
+    ExecutionLifecycle: {}
+  runnerSelector:
+    runnerFilterMode: LOCAL
+    runnerFilterType: LOCAL_RUNNER
+  scheduleEnabled: true
+  schedules: []
+  sequence:
+    commands:
+    - exec: echo hi
+    keepgoing: false
+    pluginConfig:
+      WorkflowStrategy:
+        node-first:
+          info: |-
+            <table>
+                <tr><td>1.</td><td class="text-info">NodeA</td> <td>step 1</td></tr>
+                <tr><td>2.</td><td class="text-info">"</td> <td>step 2</td></tr>
+                <tr><td>3.</td><td class="text-info">"</td> <td>step 3</td></tr>
+                <tr><td>4.</td><td class="text-muted">NodeB</td> <td>step 1</td></tr>
+                <tr><td>5.</td><td class="text-muted">"</td> <td>step 2</td></tr>
+                <tr><td>6.</td><td class="text-muted">"</td> <td>step 3</td></tr>
+            </table>
+    strategy: node-first
+  user: JP Lassnibatt
+  uuid: 51031c1f-cc82-41a4-b27f-7a09b718713f
+
