@@ -1,0 +1,44 @@
+- defaultTab: nodes
+  description: ''
+  executionEnabled: true
+  id: 5a3c72d8-6977-4010-b621-d5249227e434
+  loglevel: INFO
+  name: aws test
+  nodeFilterEditable: false
+  nodefilters:
+    dispatch:
+      excludePrecedence: true
+      keepgoing: false
+      rankOrder: ascending
+      successOnEmptyNodeFilter: false
+      threadcount: '1'
+    filter: 'name: "Runner AKS 6.2-RBA-20260827-f8023f4-c988b05"'
+  nodesSelectedByDefault: true
+  options:
+  - hidden: true
+    name: aws_key
+    secure: true
+    storagePath: keys/project/demo-test/aws/aws_access_key
+    type: text
+    valueExposed: true
+  - hidden: true
+    name: aws_secret
+    secure: true
+    storagePath: keys/project/demo-test/aws/aws_access_secret
+    type: text
+    valueExposed: true
+  plugins:
+    ExecutionLifecycle: {}
+  scheduleEnabled: true
+  schedules: []
+  sequence:
+    commands:
+    - script: |-
+        export AWS_ACCESS_KEY_ID=@option.aws_key@
+        export AWS_SECRET_ACCESS_KEY=@option.aws_secret@
+        aws sts get-caller-identity
+    keepgoing: false
+    strategy: node-first
+  user: jp
+  uuid: 5a3c72d8-6977-4010-b621-d5249227e434
+
