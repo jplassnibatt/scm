@@ -1,0 +1,66 @@
+- defaultTab: nodes
+  description: ''
+  executionEnabled: true
+  id: 9d904fc4-ca61-419a-9d29-63e3daafaba4
+  loglevel: INFO
+  name: echo
+  nodeFilterEditable: false
+  nodefilters:
+    dispatch:
+      excludePrecedence: true
+      keepgoing: false
+      rankOrder: ascending
+      successOnEmptyNodeFilter: false
+      threadcount: '1'
+    filter: 'name: "Runner AKS"'
+  nodesSelectedByDefault: true
+  plugins:
+    ExecutionLifecycle:
+      Send Incident Output to Pagerduty: {}
+  scheduleEnabled: true
+  schedules: []
+  sequence:
+    commands:
+    - plugins:
+        LogFilter:
+        - config:
+            filterName: test
+            logOutputSettings: None
+            regexPattern: ([\s\S]*)
+            stepStatus: Success
+          type: pagerduty-incident-output-capture
+        - config:
+            captureMultipleKeysValues: 'false'
+            hideOutput: 'false'
+            logData: 'false'
+            name: output
+            regex: (.*)
+          type: key-value-data-multilines
+      script: |-
+        echo "Value from PD is: @option.pd_value@"
+        echo "Incident ID is: @option.pd_incident_id@"
+    - configuration:
+        api_token: keys/project/demo-test/pdt
+        email: jlassnibatt@pagerduty.com
+        incident_id: ${option.pd_incident_id}
+        note: ${data.output*}
+      nodeStep: false
+      type: pd-note-step
+    keepgoing: true
+    pluginConfig:
+      WorkflowStrategy:
+        node-first:
+          info: |-
+            <table>
+                <tr><td>1.</td><td class="text-info">NodeA</td> <td>step 1</td></tr>
+                <tr><td>2.</td><td class="text-info">"</td> <td>step 2</td></tr>
+                <tr><td>3.</td><td class="text-info">"</td> <td>step 3</td></tr>
+                <tr><td>4.</td><td class="text-muted">NodeB</td> <td>step 1</td></tr>
+                <tr><td>5.</td><td class="text-muted">"</td> <td>step 2</td></tr>
+                <tr><td>6.</td><td class="text-muted">"</td> <td>step 3</td></tr>
+            </table>
+    strategy: node-first
+  tags: schedule
+  user: jp
+  uuid: 9d904fc4-ca61-419a-9d29-63e3daafaba4
+
